@@ -3,10 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import activityio as aio
 from scipy.stats import binned_statistic
+import os.path, time
 
-
-
-data = aio.read("testfile.fit")
+data = aio.read("testfile2.fit")
 
 fig,ax = plt.subplots(figsize=(10,4))
 
@@ -14,8 +13,12 @@ print("Pick a data series to plot:")
 name = input("("+", ".join(list(data))+")\n")
 type(name)
 
-print(data[name].values)
-print(data.time.values/np.timedelta64(1, 'm'))
+print(time.localtime(os.path.getmtime('testfile2.fit')))
+print(time.localtime(os.path.getmtime('testfile2.fit')))
+
+
+
+
 means,bin_edges,binnumber = binned_statistic(data.time.values/np.timedelta64(1, 'm'),data[name].values,bins=len(data.time.values)/5)
 ax.plot(bin_edges[:-1]+(bin_edges[1]-bin_edges[0])/2,means)
 if (name=="hr"):
