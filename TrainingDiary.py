@@ -4,18 +4,41 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import activityio as aio
 from scipy.stats import binned_statistic
-import os.path, time
+import os
+import datetime
+from sys import argv
 
-data = aio.read("testfile3.fit")
+filename = argv[1]
+
+def RepresentsInt(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+
+def chartodaymonthhour(char):
+    if (RepresentsInt(char)):
+        return(ord(char)-48)
+    else:
+        return(ord(char)-55)
+
+def extractdateandtime(filename):
+    dateandtime = []
+    dateandtime.append("201{}".format(filename[0]))
+    dateandtime.append(str(chartodaymonthhour(filename[1])))
+    dateandtime.append(str(chartodaymonthhour(filename[2])))
+    dateandtime.append(str(chartodaymonthhour(filename[3])))
+    dateandtime.append(filename[4:6])
+    dateandtime.append(filename[6:8])
+    return "-".join(dateandtime)
+
+print(extractdateandtime("88752851"))
+
+data = aio.read(filename)
 
 fig,ax = plt.subplots(nrows=3,ncols=1,figsize=(10,7))
-
-#print("Pick a data series to plot:")
-#name = input("("+", ".join(list(data))+")\n")
-#type(name)
-
-print(time.localtime(os.path.getmtime('testfile3.fit')))
-print(time.localtime(os.path.getmtime('testfile3.fit')))
+fig.suptitle(extractdateandtime(filename))
 
 caddataarray = data["cad"].values
 for i,m in enumerate(caddataarray):
