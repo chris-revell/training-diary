@@ -20,19 +20,17 @@ def chartodaymonthhour(char):
         return(ord(char)-55)
 
 def extractdateandtime(filename):
-    dateandtime = []
-    dateandtime.append("201{}".format(filename[0]))
-    dateandtime.append(str(chartodaymonthhour(filename[1])))
-    dateandtime.append(str(chartodaymonthhour(filename[2])))
-    dateandtime.append(str(chartodaymonthhour(filename[3])))
-    dateandtime.append(filename[4:6])
-    dateandtime.append(filename[6:8])
-    return "-".join(dateandtime)
+    dateandtime = "201{}-{:02d}-{:02d}-{:02d}-{}-{}".format(filename[0],chartodaymonthhour(filename[1]),chartodaymonthhour(filename[2]),chartodaymonthhour(filename[3]),filename[4:6],filename[6:8])
+    return dateandtime
 
-sessiondates = np.array([])
+sessiondirectory = []
 for f in sessionfiles:
-    sessiondates.append(extractdateandtime(f))
+    extractdateandtime(f)
+    sessiondirectory.append(extractdateandtime(f)+"    "+f)
 
-sessiondates.sort()
+sessiondirectory.sort()
 
-np.savetxt(sessiondates,"folder"+"/calendar.txt")
+with open(folder+"/calendar.txt","w") as outfile:
+    for s in sessiondirectory:
+        outfile.write(s+"\n")
+outfile.close()
