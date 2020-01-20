@@ -11,7 +11,6 @@ from sys import argv
 filename = argv[1]
 
 data = aio.read(filename)
-print("test")
 fig,ax = plt.subplots(nrows=3,ncols=1,figsize=(8,7))
 #fig.suptitle()
 
@@ -21,7 +20,7 @@ for i,m in enumerate(caddataarray):
         caddataarray[i] = caddataarray[i-1]
     else:
         pass
-means,bin_edges,binnumber = binned_statistic(data.time.values/np.timedelta64(1, 'm'),caddataarray,bins=len(data.time.values)/2)
+means,bin_edges,binnumber = binned_statistic(data.time.values/np.timedelta64(1, 'm'),caddataarray,bins=len(data.time.values)/5)
 ax[0].plot(bin_edges[:-1]+(bin_edges[1]-bin_edges[0])/2,means)
 ax[0].axhline(y=20,ls="--",color="Grey",alpha=0.3)
 ax[0].axhline(y=22,ls="--",color="Grey",alpha=0.3)
@@ -32,12 +31,12 @@ ax[0].axhline(y=30,ls="--",color="Grey",alpha=0.3)
 ax[0].axhline(y=32,ls="--",color="Grey",alpha=0.3)
 ax[0].axhline(y=34,ls="--",color="Grey",alpha=0.3)
 ax[0].axhline(y=36,ls="--",color="Grey",alpha=0.3)
-ax[0].set_ylim([28,38])
-ax[0].set_xlim([0,8.2])#np.max(data.time.values/np.timedelta64(1, 'm'))])
+#ax[0].set_ylim([28,38])
+ax[0].set_xlim([0,np.max(data.time.values/np.timedelta64(1, 'm'))])
 ax[0].set_ylabel("Stroke Rate /spm")
 
 hrdataarray = data["hr"].values
-means,bin_edges,binnumber = binned_statistic(data.time.values/np.timedelta64(1, 'm'),hrdataarray,bins=len(data.time.values)/2)
+means,bin_edges,binnumber = binned_statistic(data.time.values/np.timedelta64(1, 'm'),hrdataarray,bins=len(data.time.values)/5)
 ax[1].plot(bin_edges[:-1]+(bin_edges[1]-bin_edges[0])/2,means)
 ax[1].axhspan(96, 115, facecolor='grey', alpha=0.3)
 ax[1].axhspan(115, 134, facecolor='blue', alpha=0.3)
